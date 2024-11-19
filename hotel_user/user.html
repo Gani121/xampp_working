@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+</head>
+<body>
+    <h1>User</h1>
+	<input type="text" id="hotelname" placeholder="hotel name">
+    <input type="text" id="message" placeholder="Type a message">
+    <button onclick="sendMessage()">Send to Hotel</button>
+
+    <div id="messages"></div>
+
+    <script>
+        var ws = new WebSocket("ws://localhost:9999");
+
+        ws.onopen = function() {
+            console.log("Connected to WebSocket server.");
+        };
+
+        ws.onmessage = function(event) {
+            var messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += `<p>Hotel: ${event.data}</p>`;
+        };
+
+        function sendMessage() {
+            var message = document.getElementById("message").value;
+			 var hotel_name1 = document.getElementById("hotelname").value;
+            var data = JSON.stringify({ target: "hotel", message: message,hotel_name:hotel_name1 });
+            ws.send(data);
+        }
+    </script>
+</body>
+</html>

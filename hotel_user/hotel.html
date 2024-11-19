@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Page</title>
+</head>
+<body>
+    <h1>Hotel1</h1>
+    <div id="messages"></div>
+
+    <script>
+		
+		let hotel_label = prompt("Please enter your name:");
+        var ws = new WebSocket("ws://localhost:9999");
+
+        ws.onopen = function() {
+            console.log("Connected to WebSocket server.");
+        };
+
+        ws.onmessage = function(event) {
+			console.log(event.data)
+			
+			const jsonObject = JSON.parse(event.data);
+
+			const hotelName = jsonObject.hotel_name;
+			if(hotelName == hotel_label){
+			console.log("data received for our hotel");
+			var messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += `<p>User: ${event.data}</p>`;
+			}
+			else{
+			console.log("not our data");
+			}
+            
+        };
+    </script>
+</body>
+</html>
